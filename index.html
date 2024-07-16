@@ -3,38 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Computer Architecture Simulator</title>
+    <title>Interactive Computer Architecture Simulator</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 </head>
 <body>
     <div id="simulator">
-        <h1>Advanced Computer Architecture Simulator</h1>
-        <div id="components">
-            <div class="component draggable" draggable="true" data-type="cpu">CPU</div>
-            <div class="component draggable" draggable="true" data-type="memory">Memory</div>
-            <div class="component draggable" draggable="true" data-type="io">I/O</div>
-            <div class="component draggable" draggable="true" data-type="gpu">GPU</div>
-            <div class="component draggable" draggable="true" data-type="storage">Storage</div>
+        <h1>Interactive Computer Architecture Simulator</h1>
+        <div id="component-shop">
+            <h2>Component Shop</h2>
+            <div id="components"></div>
         </div>
         <div id="assembly-area">
-            <p>Drag and drop components here to assemble your computer</p>
+            <h2>Assembly Area</h2>
+            <div id="motherboard"></div>
         </div>
         <div id="control-panel">
             <h2>Control Panel</h2>
             <div id="performance-metrics">
                 <label for="clock-speed">Clock Speed (GHz):</label>
-                <input type="number" id="clock-speed" min="1" max="5" step="0.1" value="3.0">
+                <input type="range" id="clock-speed" min="1" max="5" step="0.1" value="3.0">
+                <span id="clock-speed-value">3.0 GHz</span>
+                
                 <label for="memory-capacity">Memory Capacity (GB):</label>
-                <input type="number" id="memory-capacity" min="4" max="64" step="4" value="16">
+                <input type="range" id="memory-capacity" min="4" max="64" step="4" value="16">
+                <span id="memory-capacity-value">16 GB</span>
             </div>
             <div id="instruction-input">
                 <textarea id="instruction-text" rows="4" placeholder="Enter instructions (one per line)"></textarea>
-                <button id="process-instructions">Process Instructions</button>
+                <button id="process-instructions">Run Simulation</button>
             </div>
         </div>
         <div id="output-panel">
             <h2>Output</h2>
             <div id="output"></div>
+        </div>
+    </div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-description"></p>
         </div>
     </div>
     <script src="script.js"></script>
