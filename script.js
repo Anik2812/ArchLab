@@ -16,6 +16,11 @@ const instructionSet = document.getElementById('instruction-set');
 const runSimulation = document.getElementById('run-simulation');
 const outputLog = document.getElementById('output-log');
 const toggleTheme = document.getElementById('toggle-theme');
+const startTutorial = document.getElementById('start-tutorial');
+const showManual = document.getElementById('show-manual');
+const manualModal = document.getElementById('manual');
+const manualContent = document.getElementById('manual-content');
+const loadExample = document.getElementById('load-example');
 
 const components = [
     { type: 'cpu', name: 'CPU (3.5 GHz, 8 cores)', power: 65, l1: 64, l2: 512, l3: 16384 },
@@ -55,6 +60,13 @@ function drag(ev) {
 
 systemBoard.addEventListener('dragover', allowDrop);
 systemBoard.addEventListener('drop', drop);
+startTutorial.addEventListener('click', runTutorial);
+showManual.addEventListener('click', displayManual);
+loadExample.addEventListener('click', loadExampleInstructions);
+
+document.querySelector('.close').addEventListener('click', () => {
+    manualModal.style.display = 'none';
+});
 
 function allowDrop(ev) {
     ev.preventDefault();
@@ -181,11 +193,25 @@ function startSimulation() {
         cycleCount += simulateInstruction(instruction, index + 1);
     });
     
-    const executionTime = (cycleCount / (parseFloat(clockSpeed.value) * 1e9)).toFixed(6);
-    logOutput(`Simulation completed. Total cycles: ${cycleCount}. Execution time: ${executionTime} seconds.`);
+    let totalCycles = 0;
+    let instructionCount = 0;
+
+    instructions.forEach((instruction, index) => {
+        const cycles = simulateInstruction(instruction, index + 1);
+        totalCycles += cycles;
+        instructionCount++;
+    });
+    
+    const executionTime = (totalCycles / (parseFloat(clockSpeed.value) * 1e9)).toFixed(6);
+    const cpi = (totalCycles / instructionCount).toFixed(2);
+    logOutput(`Simulation completed.`);
+    logOutput(`Total instructions: ${instructionCount}`);
+    logOutput(`Total cycles: ${totalCycles}`);
+    logOutput(`Cycles per Instruction (CPI): ${cpi}`);
+    logOutput(`Execution time: ${executionTime} seconds`);
     updateMemoryUsage();
-    updatePowerAndTemp(cycleCount / 1e6); // Assuming 1 watt per million cycles
-}
+    updatePowerAndTemp(totalCycles / 1e6);
+} 
 
 function simulateInstruction(instruction, index) {
     logOutput(`Executing instruction ${index}: ${instruction}`);
@@ -237,6 +263,17 @@ function simulateInstruction(instruction, index) {
     }
 
     return cycles;
+
+    if (opcode === 'MOV' && parts.length === 3) {
+        const dest = parts[1].replace(',', '');
+        const source = parts[2];
+        logOutput(`    Moving value ${source} to ${dest}`);
+    } else if ((opcode === 'ADD' || opcode === 'SUB' || opcode === 'MUL' || opcode === 'DIV') && parts.length === 4) {
+        const dest = parts[1].replace(',', '');
+        const src1 = parts[2].replace(',', '');
+        const src2 = parts[3];
+        logOutput(`    ${opcode.toLowerCase()}ing ${src1} and ${src2}, storing result in ${dest}`);
+    }
 }
 
 function simulateMemoryAccess() {
@@ -254,6 +291,116 @@ function simulateMemoryAccess() {
         logOutput("    Cache miss (accessing main memory)");
         return 100;
     }
+}
+
+// Tutorial function
+async function runTutorial() {
+    const steps = [
+        { element: componentList, message: "This is the Component Shop. Drag components from here to the System Board." },
+        { element: document.getElementById('cpu-socket'), message: "Drag a CPU to this socket." },
+        { element: document.getElementById('ram-slots'), message: "Drag RAM modules to these slots." },
+        { element: document.getElementById('sata-ports'), message: "Drag storage devices to these SATA ports." },
+        { element: document.getElementById('pcie-slots'), message: "Drag a GPU to one of these PCIe slots." },
+        { element: clockSpeed, message: "Adjust the CPU clock speed using this slider." },
+        { element: instructionSet, message: "Enter assembly instructions here or use the 'Load Example Instructions' button." },
+        { element: runSimulation, message: "Click this button to run the simulation." },
+        { element: outputLog, message: "Simulation results and system messages will appear here." }
+    ];
+
+    for (const step of steps) {
+        step.element.classList.add('highlight');
+        await new Promise(resolve => {
+            logOutput(step.message);
+            step.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => {
+                step.element.classList.remove('highlight');
+                resolve();
+            }, 3000);
+        });
+    }
+
+    logOutput("Tutorial completed. Enjoy using the simulator!");
+}
+
+// Manual content
+const manualText = `
+<h3>Welcome to the Advanced Computer Architecture Simulator</h3>
+<p>This simulator allows you to experiment with computer hardware components and run assembly-like instructions to understand how a computer works at a low level.</p>
+
+<h4>Getting Started</h4>
+<ol>
+    <li>Drag and drop components from the Component Shop to the System Board.</li>
+    <li>Install at least one CPU, RAM module, and storage device.</li>
+    <li>Adjust the CPU clock speed using the slider in the Performance Metrics section.</li>
+    <li>Enter assembly instructions in the Simulation Control text area or use the "Load Example Instructions" button.</li>
+    <li>Click "Run Simulation" to execute the instructions and see the results.</li>
+</ol>
+
+<h4>Components</h4>
+<ul>
+    <li>CPU: Central Processing Unit, the "brain" of the computer.</li>
+    <li>RAM: Random Access Memory, for temporary data storage.</li>
+    <li>Storage: SSDs or HDDs for permanent data storage.</li>
+    <li>GPU: Graphics Processing Unit, for handling visual computations.</li>
+</ul>
+
+<h4>Instruction Set</h4>
+<p>The simulator supports basic assembly-like instructions, including:</p>
+<ul>
+    <li>MOV: Move data between registers or memory</li>
+    <li>ADD, SUB, MUL, DIV: Arithmetic operations</li>
+    <li>JMP, JE, JNE: Jump instructions</li>
+    <li>PUSH, POP: Stack operations</li>
+    <li>CALL, RET: Subroutine calls and returns</li>
+    <li>AND, OR, XOR: Logical operations</li>
+</ul>
+
+<h4>Simulation Output</h4>
+<p>The simulator provides information on:</p>
+<ul>
+    <li>Instruction execution</li>
+    <li>Memory access and cache behavior</li>
+    <li>Power consumption and temperature</li>
+    <li>Total execution time and cycle count</li>
+</ul>
+
+<h4>Tips</h4>
+<ul>
+    <li>Experiment with different hardware configurations to see how they affect performance.</li>
+    <li>Try adjusting the CPU clock speed to observe its impact on power consumption and temperature.</li>
+    <li>Use the dark mode toggle for a different visual experience.</li>
+</ul>
+`;
+
+// Display manual function
+function displayManual() {
+    manualContent.innerHTML = manualText;
+    manualModal.style.display = 'block';
+}
+
+// Example instructions
+const exampleInstructions = `
+MOV R1, 10
+MOV R2, 20
+ADD R3, R1, R2
+PUSH R3
+POP R4
+MUL R5, R3, R4
+JMP LOOP
+LOOP:
+SUB R5, R5, 1
+JNE LOOP
+CALL SUBR
+RET
+SUBR:
+XOR R1, R1, R1
+RET
+`;
+
+// Load example instructions function
+function loadExampleInstructions() {
+    instructionSet.value = exampleInstructions.trim();
+    logOutput("Example instructions loaded.");
 }
 
 // Dark mode toggle
