@@ -10,6 +10,7 @@
     <div id="simulator">
         <header>
             <h1>Advanced Computer Architecture Simulator</h1>
+            <button id="toggle-theme">Toggle Dark Mode</button>
         </header>
         <div id="workspace">
             <div id="component-panel">
@@ -20,41 +21,49 @@
                 <h2>System Board</h2>
                 <div id="cpu-socket" class="socket">CPU Socket</div>
                 <div id="ram-slots" class="slot-group">
-                    <div class="ram-slot">RAM Slot 1</div>
-                    <div class="ram-slot">RAM Slot 2</div>
-                    <div class="ram-slot">RAM Slot 3</div>
-                    <div class="ram-slot">RAM Slot 4</div>
+                    <div class="ram-slot" data-slot="0">RAM Slot 1</div>
+                    <div class="ram-slot" data-slot="1">RAM Slot 2</div>
+                    <div class="ram-slot" data-slot="2">RAM Slot 3</div>
+                    <div class="ram-slot" data-slot="3">RAM Slot 4</div>
                 </div>
                 <div id="pcie-slots" class="slot-group">
-                    <div class="pcie-slot">PCIe x16 Slot</div>
-                    <div class="pcie-slot">PCIe x8 Slot</div>
-                    <div class="pcie-slot">PCIe x4 Slot</div>
+                    <div class="pcie-slot" data-slot="0">PCIe x16 Slot</div>
+                    <div class="pcie-slot" data-slot="1">PCIe x8 Slot</div>
+                    <div class="pcie-slot" data-slot="2">PCIe x4 Slot</div>
                 </div>
                 <div id="sata-ports" class="port-group">
-                    <div class="sata-port">SATA Port 1</div>
-                    <div class="sata-port">SATA Port 2</div>
-                    <div class="sata-port">SATA Port 3</div>
-                    <div class="sata-port">SATA Port 4</div>
+                    <div class="sata-port" data-port="0">SATA Port 1</div>
+                    <div class="sata-port" data-port="1">SATA Port 2</div>
+                    <div class="sata-port" data-port="2">SATA Port 3</div>
+                    <div class="sata-port" data-port="3">SATA Port 4</div>
                 </div>
             </div>
         </div>
         <div id="control-panel">
-            <h2>Control Panel</h2>
             <div id="system-status">
-                <h3>System Status</h3>
+                <h2>System Status</h2>
                 <p id="cpu-status">CPU: Not installed</p>
                 <p id="ram-status">RAM: 0 GB installed</p>
                 <p id="storage-status">Storage: 0 GB installed</p>
                 <p id="gpu-status">GPU: Not installed</p>
             </div>
             <div id="performance-metrics">
-                <h3>Performance Metrics</h3>
+                <h2>Performance Metrics</h2>
                 <label for="clock-speed">CPU Clock Speed:</label>
                 <input type="range" id="clock-speed" min="1" max="5" step="0.1" value="3.0">
                 <span id="clock-speed-value">3.0 GHz</span>
+                <p id="power-consumption">Power Consumption: 0 W</p>
+                <p id="temperature">Temperature: 25°C</p>
+            </div>
+            <div id="memory-cache">
+                <h2>Memory & Cache</h2>
+                <p id="l1-cache">L1 Cache: 0 KB</p>
+                <p id="l2-cache">L2 Cache: 0 MB</p>
+                <p id="l3-cache">L3 Cache: 0 MB</p>
+                <p id="memory-usage">Memory Usage: 0 GB / 0 GB</p>
             </div>
             <div id="simulation-control">
-                <h3>Simulation Control</h3>
+                <h2>Simulation Control</h2>
                 <textarea id="instruction-set" rows="5" placeholder="Enter assembly instructions (one per line)"></textarea>
                 <button id="run-simulation">Run Simulation</button>
             </div>
