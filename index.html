@@ -3,70 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Computer Architecture Simulator</title>
+    <title>Advanced Computer Architecture Simulator</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 </head>
 <body>
     <div id="simulator">
-        <h1>Interactive Computer Architecture Simulator</h1>
-        <div id="user-manual">
-            <h2>User Manual</h2>
-            <button id="toggle-manual">Show/Hide Manual</button>
-            <div id="manual-content" style="display: none;">
-                <h3>How to use the simulator:</h3>
-                <ol>
-                    <li>Drag components from the Component Shop to the Assembly Area.</li>
-                    <li>Click on components to learn more about them.</li>
-                    <li>Adjust the Clock Speed and Memory Capacity sliders.</li>
-                    <li>Enter instructions in the text area (one per line).</li>
-                    <li>Click "Run Simulation" to see the results.</li>
-                </ol>
-                <h3>Example Instructions:</h3>
-                <ul>
-                    <li>calculate 2 + 2</li>
-                    <li>read file from storage</li>
-                    <li>write data to memory</li>
-                    <li>render 3D graphics</li>
-                    <li>send data over network</li>
-                </ul>
+        <header>
+            <h1>Advanced Computer Architecture Simulator</h1>
+        </header>
+        <div id="workspace">
+            <div id="component-panel">
+                <h2>Components</h2>
+                <div id="component-list"></div>
             </div>
-        </div>
-        <div id="component-shop">
-            <h2>Component Shop</h2>
-            <div id="components"></div>
-        </div>
-        <div id="assembly-area">
-            <h2>Assembly Area</h2>
-            <div id="motherboard"></div>
+            <div id="system-board">
+                <h2>System Board</h2>
+                <div id="cpu-socket" class="socket">CPU Socket</div>
+                <div id="ram-slots" class="slot-group">
+                    <div class="ram-slot">RAM Slot 1</div>
+                    <div class="ram-slot">RAM Slot 2</div>
+                    <div class="ram-slot">RAM Slot 3</div>
+                    <div class="ram-slot">RAM Slot 4</div>
+                </div>
+                <div id="pcie-slots" class="slot-group">
+                    <div class="pcie-slot">PCIe x16 Slot</div>
+                    <div class="pcie-slot">PCIe x8 Slot</div>
+                    <div class="pcie-slot">PCIe x4 Slot</div>
+                </div>
+                <div id="sata-ports" class="port-group">
+                    <div class="sata-port">SATA Port 1</div>
+                    <div class="sata-port">SATA Port 2</div>
+                    <div class="sata-port">SATA Port 3</div>
+                    <div class="sata-port">SATA Port 4</div>
+                </div>
+            </div>
         </div>
         <div id="control-panel">
             <h2>Control Panel</h2>
+            <div id="system-status">
+                <h3>System Status</h3>
+                <p id="cpu-status">CPU: Not installed</p>
+                <p id="ram-status">RAM: 0 GB installed</p>
+                <p id="storage-status">Storage: 0 GB installed</p>
+                <p id="gpu-status">GPU: Not installed</p>
+            </div>
             <div id="performance-metrics">
-                <label for="clock-speed">Clock Speed (GHz):</label>
+                <h3>Performance Metrics</h3>
+                <label for="clock-speed">CPU Clock Speed:</label>
                 <input type="range" id="clock-speed" min="1" max="5" step="0.1" value="3.0">
                 <span id="clock-speed-value">3.0 GHz</span>
-                
-                <label for="memory-capacity">Memory Capacity (GB):</label>
-                <input type="range" id="memory-capacity" min="4" max="64" step="4" value="16">
-                <span id="memory-capacity-value">16 GB</span>
             </div>
-            <div id="instruction-input">
-                <textarea id="instruction-text" rows="4" placeholder="Enter instructions (one per line)"></textarea>
-                <button id="process-instructions">Run Simulation</button>
-                <button id="load-example">Load Example Instructions</button>
+            <div id="simulation-control">
+                <h3>Simulation Control</h3>
+                <textarea id="instruction-set" rows="5" placeholder="Enter assembly instructions (one per line)"></textarea>
+                <button id="run-simulation">Run Simulation</button>
             </div>
         </div>
         <div id="output-panel">
-            <h2>Output</h2>
-            <div id="output"></div>
-        </div>
-    </div>
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 id="modal-title"></h2>
-            <p id="modal-description"></p>
+            <h2>Simulation Output</h2>
+            <div id="output-log"></div>
         </div>
     </div>
     <script src="script.js"></script>
