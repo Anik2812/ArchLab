@@ -10,6 +10,28 @@
 <body>
     <div id="simulator">
         <h1>Interactive Computer Architecture Simulator</h1>
+        <div id="user-manual">
+            <h2>User Manual</h2>
+            <button id="toggle-manual">Show/Hide Manual</button>
+            <div id="manual-content" style="display: none;">
+                <h3>How to use the simulator:</h3>
+                <ol>
+                    <li>Drag components from the Component Shop to the Assembly Area.</li>
+                    <li>Click on components to learn more about them.</li>
+                    <li>Adjust the Clock Speed and Memory Capacity sliders.</li>
+                    <li>Enter instructions in the text area (one per line).</li>
+                    <li>Click "Run Simulation" to see the results.</li>
+                </ol>
+                <h3>Example Instructions:</h3>
+                <ul>
+                    <li>calculate 2 + 2</li>
+                    <li>read file from storage</li>
+                    <li>write data to memory</li>
+                    <li>render 3D graphics</li>
+                    <li>send data over network</li>
+                </ul>
+            </div>
+        </div>
         <div id="component-shop">
             <h2>Component Shop</h2>
             <div id="components"></div>
@@ -32,6 +54,7 @@
             <div id="instruction-input">
                 <textarea id="instruction-text" rows="4" placeholder="Enter instructions (one per line)"></textarea>
                 <button id="process-instructions">Run Simulation</button>
+                <button id="load-example">Load Example Instructions</button>
             </div>
         </div>
         <div id="output-panel">

@@ -21,6 +21,120 @@ const modalTitle = document.getElementById('modal-title');
 const modalDescription = document.getElementById('modal-description');
 const closeModal = document.getElementsByClassName('close')[0];
 
+// Add this to the existing JavaScript
+
+const toggleManualButton = document.getElementById('toggle-manual');
+const manualContent = document.getElementById('manual-content');
+const loadExampleButton = document.getElementById('load-example');
+
+toggleManualButton.addEventListener('click', () => {
+    manualContent.style.display = manualContent.style.display === 'none' ? 'block' : 'none';
+});
+
+loadExampleButton.addEventListener('click', loadExampleInstructions);
+
+function loadExampleInstructions() {
+    const exampleInstructions = [
+        "calculate 2 + 2",
+        "read file from storage",
+        "write data to memory",
+        "render 3D graphics",
+        "send data over network"
+    ];
+    instructionText.value = exampleInstructions.join('\n');
+}
+
+// Update the simulateInstruction function to handle more specific instructions
+function simulateInstruction(instruction, components) {
+    let steps = '';
+    steps += `1. CPU fetches instruction from RAM\n`;
+    steps += `2. CPU decodes the instruction\n`;
+    steps += `3. CPU executes the instruction:\n`;
+    
+    if (instruction.toLowerCase().includes('calculate')) {
+        const calculation = instruction.split('calculate')[1].trim();
+        try {
+            const result = eval(calculation);
+            steps += `   - Performing calculation: ${calculation} = ${result}\n`;
+        } catch (error) {
+            steps += `   - Error in calculation: ${error.message}\n`;
+        }
+    } else if (instruction.toLowerCase().includes('read') && instruction.toLowerCase().includes('storage')) {
+        steps += `   - Reading file from Storage (SSD)\n`;
+        steps += `   - Transferring data to RAM\n`;
+    } else if (instruction.toLowerCase().includes('write') && instruction.toLowerCase().includes('memory')) {
+        steps += `   - Writing data to RAM\n`;
+    } else if (instruction.toLowerCase().includes('render') && instruction.toLowerCase().includes('3d')) {
+        if ([...components].some(c => c.dataset.type === 'gpu')) {
+            steps += `   - Offloading 3D rendering to GPU\n`;
+            steps += `   - GPU processing vertex and fragment shaders\n`;
+            steps += `   - GPU rasterizing and applying textures\n`;
+        } else {
+            steps += `   - Processing 3D graphics on CPU (consider adding a GPU for better performance)\n`;
+            steps += `   - CPU performing software rendering (slower)\n`;
+        }
+    } else if (instruction.toLowerCase().includes('send') && instruction.toLowerCase().includes('network')) {
+        if ([...components].some(c => c.dataset.type === 'network')) {
+            steps += `   - Preparing data for network transmission\n`;
+            steps += `   - NIC encoding data and sending through network protocol\n`;
+        } else {
+            steps += `   - Network operation requested, but no NIC found\n`;
+            steps += `   - Unable to send data over network\n`;
+        }
+    } else {
+        steps += `   - Executing general instruction\n`;
+    }
+    
+    steps += `4. CPU stores the result in RAM or sends to output\n`;
+    return steps;
+}
+
+// Add this function to check if all necessary components are present
+function checkRequiredComponents(components) {
+    const requiredComponents = ['cpu', 'memory', 'storage'];
+    const missingComponents = requiredComponents.filter(component => 
+        ![...components].some(c => c.dataset.type === component)
+    );
+    return missingComponents;
+}
+
+// Update the runSimulation function to use the new checkRequiredComponents function
+function runSimulation() {
+    const components = motherboard.children;
+    const missingComponents = checkRequiredComponents(components);
+    
+    if (missingComponents.length > 0) {
+        output.textContent = `Please add the following components before running the simulation: ${missingComponents.join(', ')}`;
+        return;
+    }
+
+    const instructions = instructionText.value.split('\n').filter(instruction => instruction.trim() !== '');
+    if (instructions.length === 0) {
+        output.textContent = "Please enter at least one instruction.";
+        return;
+    }
+
+    const speed = parseFloat(clockSpeed.value);
+    const memory = parseInt(memoryCapacity.value);
+
+    let outputText = `System Configuration:\n`;
+    outputText += `Clock Speed: ${speed} GHz\n`;
+    outputText += `Memory Capacity: ${memory} GB\n\n`;
+    outputText += `Processing ${instructions.length} instruction(s):\n\n`;
+
+    instructions.forEach((instruction, index) => {
+        outputText += `Instruction ${index + 1}: ${instruction}\n`;
+        outputText += simulateInstruction(instruction, components);
+        outputText += `\n`;
+    });
+
+    const totalTime = (instructions.length * (1 / speed)).toFixed(2);
+    outputText += `Total processing time: ${totalTime} seconds\n`;
+
+    output.textContent = outputText;
+    animateOutput();
+}
+
 // Populate component shop
 componentTypes.forEach(component => {
     const componentElement = createComponent(component);

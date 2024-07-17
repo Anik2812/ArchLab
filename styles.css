@@ -156,3 +156,45 @@ button:hover {
     text-decoration: none;
     cursor: pointer;
 }
+/* Add this to the existing CSS */
+
+#user-manual {
+    background-color: #0f3460;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+#manual-content {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #1a1a2e;
+    border-radius: 5px;
+}
+
+#manual-content h3 {
+    color: #00fff5;
+}
+
+#manual-content ol, #manual-content ul {
+    padding-left: 20px;
+}
+
+#manual-content li {
+    margin-bottom: 5px;
+}
+
+#toggle-manual, #load-example {
+    background-color: #00fff5;
+    color: #1a1a2e;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#toggle-manual:hover, #load-example:hover {
+    background-color: #00cccc;
+}
